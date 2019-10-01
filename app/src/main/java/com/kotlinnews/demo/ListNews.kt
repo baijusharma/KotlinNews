@@ -1,7 +1,9 @@
 package com.kotlinnews.demo
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kotlinnews.demo.adapter.ListNewsAdapter
@@ -35,10 +37,13 @@ class ListNews : AppCompatActivity() {
         dialog = SpotsDialog.Builder().setContext(this).build()
 
         swipe_to_refresh.setOnRefreshListener {
-            loadNews(source, true) }
+            loadNews(source, true)
+        }
 
         diagonal_layout.setOnClickListener {
-
+            val intent = Intent(baseContext, NewsDetails::class.java)
+            intent.putExtra("webURL", webHostUrl)
+            startActivity(intent)
         }
 
         recyclerView_list_news.setHasFixedSize(true)
@@ -83,7 +88,9 @@ class ListNews : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<News>, t: Throwable) {
-
+                        Toast.makeText(
+                            baseContext, "Failed", Toast.LENGTH_SHORT
+                        ).show()
                     }
                 })
 
@@ -96,6 +103,7 @@ class ListNews : AppCompatActivity() {
 
                     override fun onResponse(call: Call<News>, response: Response<News>) {
                         swipe_to_refresh.isRefreshing = false
+                        dialog.dismiss()
                         // Get first article of hot news
                         GlideApp.with(this@ListNews)
                             .load(response.body()!!.articles[0].urlToImage)
@@ -119,7 +127,9 @@ class ListNews : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<News>, t: Throwable) {
-
+                        Toast.makeText(
+                            baseContext, "Failed", Toast.LENGTH_SHORT
+                        ).show()
                     }
                 })
 

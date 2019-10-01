@@ -17,7 +17,7 @@ object Common {
     //https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=59e3e457fc384fd4b54e1a08bf0eac44
     fun getNewsAPI(source: String): String {
         val apiUrl = StringBuilder("")
-            .append(source)
+            .append("v2/top-headlines?sources=" + source)
             .append("&apiKey=")
             .append(API_KEY)
             .toString()

@@ -1,14 +1,19 @@
 package com.kotlinnews.demo.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kotlinnews.demo.ListNews
+import com.kotlinnews.demo.NewsDetails
 import com.kotlinnews.demo.R
 import com.kotlinnews.demo.common.GlideApp
 import com.kotlinnews.demo.common.ISO8601Parser
+import com.kotlinnews.demo.interfaces.ItemClickListener
 
 import com.kotlinnews.demo.model.Article
 import kotlinx.android.synthetic.main.news_layout.view.*
@@ -37,8 +42,8 @@ class ListNewsAdapter(private val articleList: MutableList<Article>, private val
 
         GlideApp.with(context)
             .load(articleList.get(position).urlToImage)
-            .placeholder(R.drawable.ic_launcher_background)
             .fitCenter()
+            .override(200, 200)
             .into(holder.article_image);
 
         if (articleList.get(position).title.length > 65) {
@@ -63,7 +68,7 @@ class ListNewsAdapter(private val articleList: MutableList<Article>, private val
     }
 
 
-    class ListNewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+    inner class ListNewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
         val article_image = itemView.article_image
@@ -75,7 +80,14 @@ class ListNewsAdapter(private val articleList: MutableList<Article>, private val
         }
 
         override fun onClick(p0: View?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+            /* Toast.makeText(
+                 context, articleList.get(adapterPosition).url, Toast.LENGTH_SHORT
+             ).show()
+ */
+            val intent = Intent(context, NewsDetails::class.java)
+            intent.putExtra("webURL", articleList.get(adapterPosition).url)
+            context.startActivity(intent)
         }
     }
 
